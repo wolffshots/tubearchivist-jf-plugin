@@ -68,7 +68,6 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
             _userDataManager = userDataManager;
             userDataManager.UserDataSaved += OnWatchedStatusChange;
 
-            logger.LogInformation("{Message}", "Collection display name: " + Instance?.Configuration.CollectionTitle);
             logger.LogInformation("{Message}", "TubeArchivist API URL: " + Instance?.Configuration.TubeArchivistUrl);
             logger.LogInformation("{Message}", "Pinging TubeArchivist API...");
         }
@@ -162,12 +161,11 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
                 return;
             }
 
-            var topParent = eventArgs.Item.GetTopParent();
             if (
                 Instance!.Configuration.JFTAProgressSync &&
                 eventArgs.Users.Any(u => Instance!.Configuration.JFUsernameFrom.Equals(u.Username, StringComparison.Ordinal)) &&
                 eventArgs.PlaybackPositionTicks.HasValue &&
-                string.Equals(topParent?.Name, Instance?.Configuration.CollectionTitle, StringComparison.OrdinalIgnoreCase)
+                Utils.IsTubeArchivistLibrary(LibraryManager, eventArgs.Item)
             )
             {
                 long progress = (long)eventArgs.PlaybackPositionTicks / TimeSpan.TicksPerSecond;
@@ -195,12 +193,11 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
                 return;
             }
 
-            var topParent = eventArgs.Item.GetTopParent();
             var user = _userManager.GetUserById(eventArgs.UserId);
             if (
                 Configuration.JFTAProgressSync
                 && user == null
-                && string.Equals(topParent?.Name, Instance?.Configuration.CollectionTitle, StringComparison.OrdinalIgnoreCase)
+                && Utils.IsTubeArchivistLibrary(LibraryManager, eventArgs.Item)
             )
             {
                 Logger.LogError("OnWatchedStatusChange callback called without user id for item {ItemName}", eventArgs.Item.Name);
@@ -211,7 +208,7 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
                 Configuration.JFTAProgressSync
                 && user != null
                 && string.Equals(Configuration.JFUsernameFrom, user!.Username, StringComparison.Ordinal)
-                && string.Equals(topParent?.Name, Instance?.Configuration.CollectionTitle, StringComparison.OrdinalIgnoreCase)
+                && Utils.IsTubeArchivistLibrary(LibraryManager, eventArgs.Item)
             )
             {
                 var userItemData = _userDataManager.GetUserData(user, eventArgs.Item);

@@ -55,7 +55,6 @@ The plugin interacts with TubeArchivist APIs to fetch videos and channels metada
 <p>This plugin requires that you have already an instance of TubeArchivist up and running.</p>
 Once installed, you have to configure the following parameters in the plugin configuration:
 <ul>
-    <li>Collection display name</li>
     <li>TubeArchivist instance address</li>
     <li>TubeArchivist API key</li>
     <li>Overviews length (channels and videos descriptions)</li>
@@ -73,7 +72,7 @@ _NOTE: If you are using Docker containers, it is important to mount the TubeArch
 2. In the form select `Shows` as Content type, set a display name for the library and set the TubeArchivist media folder in the `Folders` section
 ![Add library](https://github.com/tubearchivist/tubearchivist-jf-plugin/assets/31162436/1eca534e-0929-4134-8587-3cff0009f618)
 
-4. Scrolling down, uncheck all metadata and image providers except `TubeArchivist`. (You won't find TubeArchivist in seasons providers, so just disable everything there)
+4. Scrolling down, uncheck all metadata and image providers except `TubeArchivist`. (You won't find TubeArchivist in seasons providers, so just disable everything there). The plugin uses the `TubeArchivist` metadata downloader to find this library.
 5. Save and come back to Home, you will see the newly added library. Jellyfin will have executed the metadata fetching for you after the collection creation and then you will see the metadata and the images of channels and videos
 
 

@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Jellyfin.Data.Enums;
+using Jellyfin.Plugin.TubeArchivistMetadata.Utilities;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Controller.Providers;
@@ -11,7 +10,7 @@ using MediaBrowser.Model.IO;
 namespace Jellyfin.Plugin.TubeArchivistMetadata.Resolvers
 {
     /// <summary>
-    /// Resolves each video file of the TubeArchivist library as its own episode.
+    /// Resolves each video file of a TubeArchivist library as its own episode.
     /// </summary>
     /// <remarks>
     /// Jellyfin 12 parses a season and an episode number from the path of each episode file.
@@ -38,22 +37,21 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Resolvers
         public BaseItem? ResolvePath(ItemResolveArgs args) => null;
 
         /// <summary>
-        /// Resolves the files of a folder of the TubeArchivist library one by one.
+        /// Resolves the files of a folder of a TubeArchivist library one by one.
         /// </summary>
         /// <param name="parent">The folder that holds the files.</param>
         /// <param name="files">The files and folders in the parent folder.</param>
         /// <param name="collectionType">The collection type of the library.</param>
         /// <param name="directoryService">Directory service.</param>
-        /// <returns>The resolved items, or null if the folder is not in the TubeArchivist library.</returns>
+        /// <returns>The resolved items, or null if the folder is not in a TubeArchivist library.</returns>
         public MultiItemResolverResult ResolveMultiple(
             Folder parent,
             List<FileSystemMetadata> files,
             CollectionType? collectionType,
             IDirectoryService directoryService)
         {
-            var collectionTitle = Plugin.Instance?.Configuration.CollectionTitle;
             if (collectionType != CollectionType.tvshows
-                || !_libraryManager.GetCollectionFolders(parent).Any(library => string.Equals(library.Name, collectionTitle, StringComparison.OrdinalIgnoreCase)))
+                || !Utils.IsTubeArchivistLibrary(_libraryManager, parent))
             {
                 // Null gives the folder to the built-in resolvers.
                 return null!;

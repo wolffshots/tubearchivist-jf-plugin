@@ -32,7 +32,6 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Configuration
                 _logger = Plugin.Instance.Logger;
             }
 
-            CollectionTitle = string.Empty;
             _tubeArchivistUrl = string.Empty;
             _tubeArchivistApiKey = string.Empty;
             MaxDescriptionLength = 500;
@@ -48,11 +47,6 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Configuration
             JFTAPlaylistsSyncTaskInterval = 60;
             TAJFPlaylistsSyncTaskInterval = 60;
         }
-
-        /// <summary>
-        /// Gets or sets TubeArchivist collection display name.
-        /// </summary>
-        public string CollectionTitle { get; set; }
 
         /// <summary>
         /// Gets or sets TubeArchivist URL.

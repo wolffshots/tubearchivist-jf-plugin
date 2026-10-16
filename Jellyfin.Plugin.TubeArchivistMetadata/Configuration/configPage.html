@@ -16,12 +16,6 @@
                         <h1>TubeArchivistMetadata</h1>
                     </div>
                     <div class="inputContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="CollectionTitle">Collection Title</label>
-                        <input id="CollectionTitle" name="CollectionTitle" type="text" is="emby-input"
-                            placeholder="eg. YouTube" />
-                        <div class="fieldDescription">TubeArchivist collection display name</div>
-                    </div>
-                    <div class="inputContainer">
                         <label class="inputLabel inputLabelUnfocused" for="TubeArchivistUrl">TubeArchivist URL</label>
                         <input id="TubeArchivistUrl" name="TubeArchivistUrl" type="text" is="emby-input"
                             placeholder="http://..." />
@@ -177,7 +171,6 @@
                 .addEventListener('pageshow', function () {
                     Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(TAMetadataConfig.pluginUniqueId).then(function (config) {
-                        document.querySelector('#CollectionTitle').value = config.CollectionTitle;
                         document.querySelector('#TubeArchivistUrl').value = config.TubeArchivistUrl;
                         document.querySelector('#TubeArchivistApiKey').value = config.TubeArchivistApiKey;
                         document.querySelector('#MaxDescriptionLength').value = config.MaxDescriptionLength;
@@ -200,7 +193,6 @@
                 .addEventListener('submit', function (e) {
                     Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(TAMetadataConfig.pluginUniqueId).then(function (config) {
-                        config.CollectionTitle = document.querySelector('#CollectionTitle').value;
                         config.TubeArchivistUrl = document.querySelector('#TubeArchivistUrl').value;
                         config.TubeArchivistApiKey = document.querySelector('#TubeArchivistApiKey').value;
                         config.MaxDescriptionLength = document.querySelector('#MaxDescriptionLength').value;

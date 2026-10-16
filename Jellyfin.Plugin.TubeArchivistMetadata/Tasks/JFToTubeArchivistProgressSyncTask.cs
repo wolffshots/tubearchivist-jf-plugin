@@ -72,17 +72,14 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Tasks
                     return;
                 }
 
-                var items = _libraryManager.GetItemList(new InternalItemsQuery
+                var collectionItem = _libraryManager.GetItemList(new InternalItemsQuery
                 {
-                    Name = Plugin.Instance?.Configuration.CollectionTitle,
                     IncludeItemTypes = new[] { BaseItemKind.CollectionFolder }
-                });
-
-                var collectionItem = items.Count > 0 ? items[0] : null;
+                }).FirstOrDefault(library => Utils.IsTubeArchivistLibrary(_libraryManager, library));
 
                 if (collectionItem == null)
                 {
-                    var message = $"Collection '{Plugin.Instance?.Configuration.CollectionTitle}' not found.";
+                    var message = "No library uses the TubeArchivist metadata fetcher.";
                     _logger.LogCritical("{Message}", message);
                 }
                 else
@@ -121,7 +118,7 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Tasks
                 var processedVideosCount = 0;
                 if (collectionItem == null)
                 {
-                    var message = $"Collection '{Plugin.Instance?.Configuration.CollectionTitle}' not found.";
+                    var message = "No library uses the TubeArchivist metadata fetcher.";
                     _logger.LogCritical("{Message}", message);
                 }
                 else
