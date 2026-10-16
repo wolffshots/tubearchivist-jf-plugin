@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Library;
 
 namespace Jellyfin.Plugin.TubeArchivistMetadata.Utilities
 {
@@ -138,6 +140,18 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Utilities
             {
                 return '/'; // Unix directory separator
             }
+        }
+
+        /// <summary>
+        /// Tells if the library of an item uses the TubeArchivist metadata fetcher.
+        /// </summary>
+        /// <param name="libraryManager">Library manager.</param>
+        /// <param name="item">An item, or the collection folder of a library.</param>
+        /// <returns>True if a type of the library lists the TubeArchivist metadata fetcher.</returns>
+        public static bool IsTubeArchivistLibrary(ILibraryManager libraryManager, BaseItem item)
+        {
+            return libraryManager.GetLibraryOptions(item).TypeOptions
+                .Any(options => options.MetadataFetchers.Contains(Constants.ProviderName, StringComparer.OrdinalIgnoreCase));
         }
 
         /// <summary>
